@@ -13,16 +13,17 @@ namespace TaskManager.Infrastructure.Repositories
 
         public async Task<List<TaskJob>> GetTasksByProject(Guid projectId)
         {
-            return await _dbEntities.Where(p => p.ProjectId == projectId).ToListAsync();
+            return await _dbEntities.AsNoTracking().Where(p => p.ProjectId == projectId).ToListAsync();
         }
 
-        //REVER SE ESTE METODO ESTA CERTO AQUI OU NA CLASSE PROJECTREPOSITORY
-        public async Task AddTaskToProject(Task task, Guid projectId)
+        public async Task RemoveTaskProject(Guid taskId, Guid projectId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task RemoveTaskProject(Guid taskId, Guid projectId)
+
+        //REVER SE ESTE METODO ESTA CERTO AQUI OU NA CLASSE PROJECTREPOSITORY
+        public Task AddTaskToProject(TaskJob task, Guid projectId)
         {
             throw new NotImplementedException();
         }

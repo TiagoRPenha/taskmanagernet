@@ -18,11 +18,11 @@ namespace TaskManager.Infrastructure.Repositories
 
         public async Task<List<TEntity>> GetAll()
         {
-            return await _dbEntities.ToListAsync();
+            return await _dbEntities.AsNoTracking().ToListAsync();
         }
         public async Task<TEntity> GetById(Guid id)
         {
-            return await _dbEntities.FindAsync(id);
+            return await _dbEntities.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
         }
         public async Task Create(TEntity entity)
         {
@@ -38,17 +38,23 @@ namespace TaskManager.Infrastructure.Repositories
         }
         public async Task Delete(Guid id)
         {
-            _dbEntities.Remove(new TEntity { Id = id });
+            TEntity entity = new TEntity
+            {
+                Id = id 
+            };
+
+            _context.Entry(entity).State = EntityState.Detached;
+            _context.Remove(entity);            
 
             await SaveChanges();
         }
         public async Task<int> SaveChanges()
         {
-            return await _context.SaveChangesAsync();   
+            return await _context.SaveChangesAsync();
         }
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _context?.Dispose();
         }
     }
 }

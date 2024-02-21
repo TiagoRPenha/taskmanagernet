@@ -11,7 +11,7 @@ namespace TaskManager.Infrastructure.Repositories
 
         public async Task<List<Project>> GetProjectByUser(Guid userId)
         {
-            return await _dbEntities.Where(p => p.UserId == userId).ToListAsync();
+            return await _dbEntities.AsNoTracking().Where(p => p.UserId == userId).ToListAsync();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace TaskManager.Infrastructure.Mappings
             builder.Property(p => p.Comment)
                 .HasColumnType("varchar(100)");
 
-            builder.ToTable("TasksJobs");
+            builder.ToTable("Tasks");
         }
     }
 }

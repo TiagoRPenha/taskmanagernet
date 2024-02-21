@@ -2,7 +2,7 @@
 {
     public enum UserProfile
     {
-        User,
+        User = 1,
         Manager
     }
 }

@@ -1,4 +1,6 @@
 ﻿using TaskManager.Business.Interface.Repositories;
+using TaskManager.Business.Interface.Services;
+using TaskManager.Business.Services;
 using TaskManager.Infrastructure.Context;
 using TaskManager.Infrastructure.Repositories;
 
@@ -10,8 +12,11 @@ namespace TaskManager.Api.Configurations
         {
             services.AddScoped<TaskContext>();
 
-            services.AddTransient<ITaskJobRepository, TaskJobRepository>();
-            services.AddTransient<IProjectRepository, ProjectRepository>();
+            services.AddScoped<ITaskJobRepository, TaskJobRepository>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
+
+            services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<ITaskJobService, TaskJobService>();
 
             return services;
         }
