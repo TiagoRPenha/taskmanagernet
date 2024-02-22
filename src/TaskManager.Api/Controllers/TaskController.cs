@@ -15,7 +15,9 @@ namespace TaskManager.Api.Controllers
         private readonly ITaskJobRepository _taskJobRepository;
         private readonly IMapper _mapper;
 
-        public TaskController(ITaskJobService taskJobService, ITaskJobRepository taskJobRepository, IMapper mapper)
+        public TaskController(ITaskJobService taskJobService, 
+                              ITaskJobRepository taskJobRepository, 
+                              IMapper mapper)
         {
             _taskJobService = taskJobService;
             _taskJobRepository = taskJobRepository;
@@ -23,59 +25,54 @@ namespace TaskManager.Api.Controllers
         }
 
         [HttpGet("{projectId:guid}")]
-        public async Task<IActionResult> GetAllTaskByProject(Guid projectId)
+        public async Task<IActionResult> GetAllTaskByProjectAsync(Guid projectId)
         {
             return Ok(await _taskJobService.GetTasksByProject(projectId));
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTask([FromBody] TaskJobInputModel taskJobInput)
+        public async Task<IActionResult> CreateTaskAsync([FromBody] TaskJobInputModel taskJobInput)
         {
             if (taskJobInput == null)
             {
                 return BadRequest();
             }
 
-            var tasks = await _taskJobService.GetTasksByProject(taskJobInput.ProjectId);
-            
+            List<TaskJob> tasks = await _taskJobService.GetTasksByProject(taskJobInput.ProjectId);
+
             if (tasks != null && tasks.Count <= 20)
             {
                 var task = _mapper.Map<TaskJob>(taskJobInput);
 
-                await _taskJobService.Create(task);
-
-                return Ok();
+                return Ok(await _taskJobService.Create(task));
             }
 
             return BadRequest($"Não foi possivel cadastrar a tarefa, o projeto já possui o limite de vinte tarefas!");
         }
 
         [HttpPut("{taskId:guid}")]
-        public async Task<IActionResult> UpdateTask([FromBody] TaskJobInputUpdateModel taskJobInput, Guid taskId)
+        public async Task<IActionResult> UpdateTask([FromBody] TaskJobInputUpdateModel taskJobInput, Guid taskId, Guid userIdUpdate)
         {
-            var result = await _taskJobRepository.GetById(taskId);
+            TaskJob task = await _taskJobRepository.GetById(taskId);
 
-            if (result == null)
+            if (task == null)
             {
                 return BadRequest();
             }
 
-            result.Title = taskJobInput.Title;
-            result.Description = taskJobInput.Description;
-            result.Status = taskJobInput.Status;
-            result.Comment = taskJobInput.Comment;
+            task.Title = taskJobInput.Title;
+            task.Description = taskJobInput.Description;
+            task.Status = taskJobInput.Status;
 
-            await _taskJobService.Update(result);
-
-            return Ok();
+            return Ok(await _taskJobService.Update(task));
         }
 
         [HttpDelete("{taskId:guid}")]
         public async Task<IActionResult> DeleteTask(Guid taskId)
         {
-            var result = await _taskJobRepository.GetById(taskId);
+            TaskJob task = await _taskJobRepository.GetById(taskId);
 
-            if (result == null)
+            if (task == null)
             {
                 return BadRequest();
             }

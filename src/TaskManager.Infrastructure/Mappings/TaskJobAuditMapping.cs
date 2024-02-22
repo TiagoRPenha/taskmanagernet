@@ -26,6 +26,9 @@ namespace TaskManager.Infrastructure.Mappings
               .IsRequired()
               .HasColumnType("varchar(150)");
 
+            builder.Property(p => p.Comment)
+                .HasColumnType("varchar(150)");
+
             builder.ToTable("TaskJobAudit");
         }
     }

@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using System.Net.Http;
+using System.Security.Claims;
 using TaskManager.Business.Models;
 using TaskManager.Business.Models.Enums;
 
@@ -6,7 +9,8 @@ namespace TaskManager.Infrastructure.Context
 {
     public class TaskContext : DbContext
     {
-        public TaskContext(DbContextOptions<TaskContext> options) : base(options) { }
+        public IHttpContextAccessor HttpContext { get; }
+        public TaskContext(DbContextOptions<TaskContext> options, IHttpContextAccessor httpContext) : base(options) { HttpContext = httpContext; }
 
         public DbSet<TaskJob> Tasks { get; set; }
         public DbSet<Project> Projects { get; set; }
@@ -26,6 +30,8 @@ namespace TaskManager.Infrastructure.Context
 
         private async Task BeforeSaveChanges()
         {
+            var login = HttpContext?.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
+
             ChangeTracker.DetectChanges();
 
             foreach (var entry in ChangeTracker.Entries().ToList())
@@ -59,9 +65,11 @@ namespace TaskManager.Infrastructure.Context
                         auditEntry.NewValues[propertyName] = property.CurrentValue;
                     }
 
-                    await TaskAudit.AddAsync(auditEntry.ToAudit());
+                    if (entry.State == EntityState.Modified)
+                        await TaskAudit.AddAsync(auditEntry.ToAudit());
                 }
             }
         }
+       
     }
 }

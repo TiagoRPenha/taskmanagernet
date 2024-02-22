@@ -13,9 +13,14 @@ namespace TaskManager.Business.Services
             _taskRepository = taskRepository;
         }
 
-        public async Task Create(TaskJob task)
+        public async Task<TaskJob> Create(TaskJob task)
         {
-            await _taskRepository.Create(task);
+            return await _taskRepository.Create(task);
+        }
+
+        public async Task<TaskJob> Update(TaskJob task)
+        {
+            return await _taskRepository.Update(task);
         }
 
         public async Task Delete(Guid taskId)
@@ -26,11 +31,6 @@ namespace TaskManager.Business.Services
         public async Task<List<TaskJob>> GetTasksByProject(Guid projectId)
         {
             return await _taskRepository.GetTasksByProject(projectId);
-        }
-
-        public async Task Update(TaskJob task)
-        {
-            await _taskRepository.Update(task);
         }
     }
 }

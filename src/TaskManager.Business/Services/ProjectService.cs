@@ -16,13 +16,13 @@ namespace TaskManager.Business.Services
             _jobRepository = jobRepository;
         }
 
-        public async Task Create(Project project)
+        public async Task<Project> Create(Project project)
         {
-            await _projectRepository.Create(project);
+            return await _projectRepository.Create(project);
         }
-        public async Task Update(Project project)
+        public async Task<Project> Update(Project project)
         {
-            await _projectRepository.Update(project);
+            return await _projectRepository.Update(project);
         }
 
         public async Task Delete(Guid projectId)
@@ -30,7 +30,7 @@ namespace TaskManager.Business.Services
             await _projectRepository.Delete(projectId);
         }
 
-        public async Task<List<Project>> GetProjectByUser(Guid userId)
+        public async Task<List<Project>> GetAllProjectsByUser(Guid userId)
         {
             return await _projectRepository.GetProjectByUser(userId);
         }

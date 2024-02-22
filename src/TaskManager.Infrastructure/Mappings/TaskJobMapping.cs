@@ -18,9 +18,6 @@ namespace TaskManager.Infrastructure.Mappings
                 .IsRequired()
                 .HasColumnType("varchar(150");
 
-            builder.Property(p => p.Comment)
-                .HasColumnType("varchar(100)");
-
             builder.ToTable("Tasks");
         }
     }

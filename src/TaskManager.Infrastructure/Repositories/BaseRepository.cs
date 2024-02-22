@@ -24,17 +24,21 @@ namespace TaskManager.Infrastructure.Repositories
         {
             return await _dbEntities.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
         }
-        public async Task Create(TEntity entity)
+        public async Task<TEntity> Create(TEntity entity)
         {
             _dbEntities.Add(entity);
 
             await SaveChanges();
+
+            return entity;
         }
-        public async Task Update(TEntity entity)
+        public async Task<TEntity> Update(TEntity entity)
         {
             _dbEntities.Update(entity);
 
             await SaveChanges();
+
+            return entity;
         }
         public async Task Delete(Guid id)
         {

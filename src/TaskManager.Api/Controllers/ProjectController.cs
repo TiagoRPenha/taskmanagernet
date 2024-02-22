@@ -12,52 +12,50 @@ namespace TaskManager.Api.Controllers
     public class ProjectController : ControllerBase
     {
         private readonly IProjectService _projectService;
-        private readonly ITaskJobService _taskJobService;
         private readonly IProjectRepository _projectRepository;
         private readonly IMapper _mapper;
 
-        public ProjectController(IProjectService projectService, IProjectRepository projectRepository, ITaskJobService taskJobService, IMapper mapper)
+        public ProjectController(IProjectService projectService, 
+                                 IProjectRepository projectRepository, 
+                                 IMapper mapper)
         {
             _projectService = projectService;
             _projectRepository = projectRepository;
-            _taskJobService = taskJobService;
             _mapper = mapper;
         }
 
         [HttpGet("{userId:guid}")]
-        public async Task<IActionResult> GetAllProjectsByUser(Guid userId)
+        public async Task<IActionResult> GetAllProjectsByUserAsync(Guid userId)
         {
-            return Ok(await _projectService.GetProjectByUser(userId));
+            return Ok(await _projectService.GetAllProjectsByUser(userId));
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProject([FromBody] ProjectInputModel projetInput)
+        public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectInputModel projetInput)
         {
             if (projetInput == null)
             {
                 return BadRequest();
             }
 
-            var project = _mapper.Map<Project>(projetInput);
+            Project project = _mapper.Map<Project>(projetInput);
 
-            await _projectService.Create(project);
-
-            return Ok();
+            return Ok(await _projectService.Create(project));
         }
 
         [HttpDelete("{projectId:guid}")]
-        public async Task<IActionResult> DeleteProject(Guid projectId)
+        public async Task<IActionResult> DeleteProjectAsync(Guid projectId)
         {
-            var result = await _projectRepository.GetById(projectId);
+            Project project = await _projectRepository.GetById(projectId);
 
-            if (result == null)
+            if (project == null)
             {
                 return BadRequest("Não existe projeto cadastrado com este Id.");
             }
 
-            var existsTasksPending = await _projectService.ValidateProjectExistsTasksStatusPending(projectId);
+            bool existsTasksWithStatusPending = await _projectService.ValidateProjectExistsTasksStatusPending(projectId);
 
-            if(existsTasksPending)
+            if(existsTasksWithStatusPending)
             {
                 return BadRequest("O projeto possui tarefas pendentes, conclua ou remova as tarefas para prosseguir com a exclusão do projeto!");
             }
