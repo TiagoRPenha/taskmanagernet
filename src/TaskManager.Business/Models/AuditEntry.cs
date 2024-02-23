@@ -9,7 +9,7 @@ namespace TaskManager.Business.Models
         public AuditEntry(EntityEntry entry) => Entry = entry;
 
         public EntityEntry Entry { get; }
-        public Dictionary<string, object> UserId { get; set; }
+        public string UserId { get; set; }
         public Dictionary<string, object> KeyValues { get; } = new();
         public Dictionary<string, object> OldValues { get; } = new();
         public Dictionary<string, object> NewValues { get; } = new();
@@ -22,7 +22,7 @@ namespace TaskManager.Business.Models
             var audit = new TaskJobAudit
             {
                 Id = Guid.NewGuid(),
-                UserId = UserId.Count == 0 ? "" : JsonSerializer.Serialize(UserId),
+                UserId = Guid.NewGuid().ToString(),
                 Type = AuditType.ToString(),
                 UpdateDate = DateTime.Now,
                 OldValue = OldValues.Count == 0 ? "" : JsonSerializer.Serialize(OldValues),

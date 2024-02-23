@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManager.Infrastructure"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManager.Api", "src\TaskManager.Api\TaskManager.Api.csproj", "{36A82B3D-F821-46CA-B247-26FA7E8D6DE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Tests", "src\TaskManager.Tests\TaskManager.Tests.csproj", "{76F91F87-DEE4-41D9-90D6-1441AD455E5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManager.Tests", "src\TaskManager.Tests\TaskManager.Tests.csproj", "{76F91F87-DEE4-41D9-90D6-1441AD455E5D}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{FFAB6A6D-7AFB-4904-93C4-A73A306D6779}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{76F91F87-DEE4-41D9-90D6-1441AD455E5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76F91F87-DEE4-41D9-90D6-1441AD455E5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76F91F87-DEE4-41D9-90D6-1441AD455E5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFAB6A6D-7AFB-4904-93C4-A73A306D6779}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFAB6A6D-7AFB-4904-93C4-A73A306D6779}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFAB6A6D-7AFB-4904-93C4-A73A306D6779}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFAB6A6D-7AFB-4904-93C4-A73A306D6779}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

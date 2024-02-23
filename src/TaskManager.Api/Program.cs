@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json.Serialization;
 using TaskManager.Api.Configurations;
 using TaskManager.Infrastructure.Context;
@@ -13,6 +14,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddDbContext<TaskContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbTaskManager"));
+
 });
 
 builder.Services.ResolveDependencyInjection();
@@ -28,7 +30,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TASK MANAGER - API");
+        c.RoutePrefix = string.Empty;
+    });
 }
 
 app.UseHttpsRedirection();
@@ -36,5 +42,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+MigrationsConfig.MigrationInitialisation(app);
 
 app.Run();

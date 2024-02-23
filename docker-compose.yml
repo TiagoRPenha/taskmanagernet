@@ -1,0 +1,23 @@
+version: '3.4'
+
+
+services:
+  sql_server2022:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    hostname: 'sql_server2022'
+    environment:
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: "Numsey#2021"
+    volumes:
+      - c:\dados\volumes\mssql:/var/opt/mssql3
+    ports:
+      - '11433:1433'    
+    expose:
+      - 1433
+  taskmanager.api:
+    image: ${DOCKER_REGISTRY-}taskmanagerapi
+    build:
+      context: .
+      dockerfile: src/TaskManager.Api/Dockerfile
+    depends_on:
+      - sql_server2022
